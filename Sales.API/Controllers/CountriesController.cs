@@ -7,11 +7,11 @@ namespace Sales.API.Controllers
 {
     [ApiController]
     [Route("api/countries")]
-    public class CountriesController: ControllerBase
+    public class CountriesController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public CountriesController(DataContext context) 
+        public CountriesController(DataContext context)
         {
             this._context = context;
         }
@@ -25,7 +25,7 @@ namespace Sales.API.Controllers
 
             //para guardar el registro
             await _context.SaveChangesAsync();
-            
+
             //devuelve como fue llamado
             return Ok(country);
         }

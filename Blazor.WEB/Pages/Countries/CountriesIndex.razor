@@ -1,0 +1,59 @@
+﻿@using Blazor.WEB.Repositories;
+@using Sales.Shared.Entities;
+
+@* identificacion de la pagina *@
+@page "/countries"
+@inject IRepository repository
+
+
+<h2>Paises</h2>
+
+@if(Countries is null)
+{
+    <p>Cargando...;)</p>
+}
+else
+{
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th>País</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var country in Countries)
+            {
+                <tr>
+                    <td>
+                        <a class="btn btn-warning">Editar</a>
+                        <button class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>
+                        @country.Id
+                    </td>
+                    <td>
+                        @country.Name
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+}
+
+<h3>CountriesIndex</h3>
+
+@code {
+
+    public List<Country>? Countries{ get; set; }
+
+    //cuando la pagina carga, ejecuta este metodo
+    protected async override Task OnInitializedAsync()
+    {
+        var responseHppt = await repository.Get<List<Country>>("api/countries");
+        Countries = responseHppt.Response!;
+    }
+
+}
