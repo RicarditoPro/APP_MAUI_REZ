@@ -1,0 +1,62 @@
+﻿<h3>GenericList</h3>
+
+@typeparam Titem
+
+@if (MyList is null)
+{
+    @if(Loading is null)
+    {
+        <div class="align-items-center">
+            
+         
+            <img src="https://codigofuente.io/wp-content/uploads/2018/09/progress.gif"/>
+        </div>
+
+    }
+    else
+    {
+        @Loading
+        
+    }
+}
+else
+{
+    @if(MyList.Count==0)
+    {
+        @if(NoRecords is null)
+        {
+            <div class="align-items-center">
+                <p> SORRYS NO HAY NADA QUE MOSTRAR</p>
+
+            </div>
+        }
+        else
+        {
+            @NoRecords
+        }
+    }
+    else
+    {
+        @Body
+    }
+}
+
+@code {
+
+    //parametros opcionales con ?
+    [Parameter]
+    public RenderFragment? Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment? NoRecords { get; set; }
+
+    //parametros obligatorios
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment Body { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public List<Titem> MyList { get; set; } = null!;
+
+}
