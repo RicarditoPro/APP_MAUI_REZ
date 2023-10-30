@@ -12,7 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
   o la liga de cualquier otro Hosting del cual estemos consumiendo el servicio API.*/
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7188p/") });
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7261/") });
-builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddSweetAlert2();
 
 await builder.Build().RunAsync();

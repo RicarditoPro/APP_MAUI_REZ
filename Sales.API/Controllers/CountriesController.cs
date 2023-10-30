@@ -39,14 +39,14 @@ namespace Sales.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetAsync(int id) 
+        public async Task<IActionResult> GetAsync(int id)
         {
             var country = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id);
-            if(country == null)
+            if (country == null)
             {
                 return NotFound();
             }
-            
+
             return Ok(country);
         }
 
@@ -65,7 +65,7 @@ namespace Sales.API.Controllers
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var country = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id);
-            if(country == null)
+            if (country == null)
             {
                 return NotFound();
             }

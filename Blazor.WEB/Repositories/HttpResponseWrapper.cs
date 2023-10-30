@@ -32,7 +32,7 @@ namespace Web.Repositories
                 return "Recurso no encontrado";
             }
             else if (statusCode == HttpStatusCode.BadRequest)
-            {         
+            {
                 return await HttpResponseMessage.Content.ReadAsStringAsync();
             }
 
@@ -45,8 +45,8 @@ namespace Web.Repositories
                 return "No tienes permisos para hacer esta operación";
             }
             return "Ha ocurrido un error inesperado";
-            
+
         }
-        
+
     }
 }
