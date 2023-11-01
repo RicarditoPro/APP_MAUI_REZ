@@ -6,43 +6,49 @@
 @inject IRepository repository
 
 
+
 <h2>Paises</h2>
 
-@if(Countries is null)
-{
-    <p>Cargando...;)</p>
-}
-else
-{
-    <table class="table table-striped">
+<a class="btn btn-primary" href="/countries/create">Nuevo País</a>
 
-        <thead>
-            <tr>
-                <th>Controles</th>
-                <th>No.Pais</th>
-                <th>Nombre</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var country in Countries)
-            {
+<GenericList MyList="Countries">
+    <Loading>
+        <p>Cargandinggg.....</p>
+    </Loading>
+    <Body>
+        <table class="table table-striped">
+
+            <thead>
                 <tr>
-                    <td>
-                        <a class="btn btn-warning">Editar</a>
-                        <button class="btn btn-danger">Borrar</button>
-                    </td>
-                    <td>
-                        @country.Id
-                    </td>
-                    <td>
-                        @country.Name
-                    </td>
+                    <th>Controles</th>
+                    <th>No.Pais</th>
+                    <th>Nombre</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    
-}
+            </thead>
+            <tbody>
+                @foreach (var country in Countries)
+                {
+                    <tr>
+                        <td>
+                            <a class="btn btn-warning">Editar</a>
+                            <button class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>
+                            @country.Id
+                        </td>
+                        <td>
+                            @country.Name
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    </Body>
+
+</GenericList>
+
 
 <h3>CountriesIndex</h3>
 
