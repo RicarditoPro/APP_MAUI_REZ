@@ -5,16 +5,20 @@
 @page "/countries"
 @inject IRepository repository
 
+@inject NavigationManager navigationManager;
+@inject SweetAlertService sweetAlertService;
+
 
 
 <h2>Paises</h2>
 
-<a class="btn btn-primary" href="/countries/create">Nuevo País</a>
+<a class="btn btn-primary mb-3" href="/countries/create">Nuevo País</a>
 
 <GenericList MyList="Countries">
     <Loading>
         <p>Cargandinggg.....</p>
     </Loading>
+
     <Body>
         <table class="table table-striped">
 
@@ -30,8 +34,8 @@
                 {
                     <tr>
                         <td>
-                            <a class="btn btn-warning">Editar</a>
-                            <button class="btn btn-danger">Borrar</button>
+                            <a class="btn btn-warning" href="/countries/edit/@country.Id">Editar</a>
+                            <button class="btn btn-danger" @onclick=@(()=>DelegateAsync(country.Id) )>Borrar</button>
                         </td>
                         <td>
                             @country.Id
@@ -54,6 +58,7 @@
 
 @code {
 
+
     public List<Country>? Countries{ get; set; }
 
     //cuando la pagina carga, ejecuta este metodo
@@ -61,6 +66,49 @@
     {
         var responseHppt = await repository.Get<List<Country>>("api/countries");
         Countries = responseHppt.Response!;
+    }
+
+    private async Task LoadAsync()
+    {
+        
+    }
+
+    private async Task DelegateAsync(int id)
+    {
+        var result = await sweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmacion",
+                Text = "¿Deseas abandonar la´página?",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                CancelButtonText = "No perro",
+                ConfirmButtonText = "Sip :)",
+            });
+
+
+        var confirm = string.IsNullOrEmpty(result.Value);
+        if (confirm)
+        {
+            return;
+            //Deja salir al usuario sin guardar los cambios
+        }
+
+        var responseHttp = await repository.Delete($"/api/countries/{id}");
+        if (responseHttp.Error)
+        {
+
+            if(responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await sweetAlertService.FireAsync("HHERROR",message,SweetAlertIcon.Error);
+                return;
+
+            }
+        }
+
+    }
+
+
     }
 
 }
