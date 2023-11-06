@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Sales.API.Data;
 using Sales.Shared.Entities;
+using System.Linq.Expressions;
 
 namespace Sales.API.Controllers
 {
@@ -20,15 +21,33 @@ namespace Sales.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Country country)
         {
-            _context.Add(country);
-            //_context.Countries.Add(country);
+            try
+            {
+                _context.Add(country);
+                //_context.Countries.Add(country);
 
-            //para guardar el registro
-            await _context.SaveChangesAsync();
+                //para guardar el registro
+                await _context.SaveChangesAsync();
 
-            //devuelve como fue llamado
-            return Ok(country);
+                //devuelve como fue llamado
+                return Ok(country);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("Sorrys :( Ya existe un registro con el mismo nombre");
+                }
+                return BadRequest("Sorrys :( Ya existe un registro con el mismo nombre");
+                //return BadRequest(dbUpdateException.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
+        
 
 
         //METODO GET
@@ -56,9 +75,26 @@ namespace Sales.API.Controllers
         [HttpPut]
         public async Task<ActionResult> PutAsync(Country country)
         {
-            _context.Update(country);
-            await _context.SaveChangesAsync();
-            return Ok(country);
+            try
+            {
+                _context.Update(country);
+                await _context.SaveChangesAsync();
+                return Ok(country);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest(";/ Ya existe un registro con el mismo nombre");
+                }
+                return BadRequest(";/ Ya existe un registro con el mismo nombre");
+                //return BadRequest(dbUpdateException.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         //Método Delete

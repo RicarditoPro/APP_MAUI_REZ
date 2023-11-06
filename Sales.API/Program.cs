@@ -10,9 +10,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Se le agrego este servicio
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=DockerConnection"));
+builder.Services.AddTransient<SeedBd>();
 
 var app = builder.Build();
+//injeccion
+SeedData(app);
+
+void SeedData(WebApplication app)
+{
+    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (IServiceScope? scope = scopedFactory!.CreateScope())
+    {
+        SeedBd? service = scope.ServiceProvider.GetService<SeedBd>();
+        service!.SeedAsync().Wait();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
