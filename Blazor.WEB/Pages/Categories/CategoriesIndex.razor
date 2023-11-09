@@ -1,8 +1,7 @@
 ﻿@using Blazor.WEB.Repositories;
 @using Sales.Shared.Entities;
 
-@* identificacion de la pagina *@
-@page "/countries"
+@page "/categories"
 @inject IRepository repository
 
 @inject NavigationManager navigationManager;
@@ -10,13 +9,14 @@
 
 
 
-<h2>Paises</h2>
 
-<a class="btn btn-primary mb-3" href="/countries/create">Nuevo País</a>
+<h2>Categorias de Ricardito</h2>
 
-<GenericList MyList="Countries">
+<a class="btn btn-primary mb-3" href="/categories/create">Crear nueva Categoria</a>
+
+<GenericList MyList="Categories">
     <Loading>
-        <p>Cargandinggg.....</p>
+        <p>Cargando categorias ;).....</p>
     </Loading>
 
     <Body>
@@ -25,23 +25,31 @@
             <thead>
                 <tr>
                     <th>Controles</th>
-                    <th>No.Pais</th>
+                    <th>No.Categoria</th>
                     <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Dirección</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var country in Countries)
+                @foreach (var category in Categories)
                 {
                     <tr>
                         <td>
-                            <a class="btn btn-warning" href="/countries/edit/@country.Id">Editar</a>
-                            <button class="btn btn-danger" @onclick=@(()=>DelegateAsync(country.Id) )>Borrar</button>
+                            <a class="btn btn-warning" href="/categories/edit/@category.Id">Editar</a>
+                            <button class="btn btn-danger" @onclick=@(()=>DelegateAsync(category.Id) )>Borrar</button>
                         </td>
                         <td>
-                            @country.Id
+                            @category.Id
                         </td>
                         <td>
-                            @country.Name
+                            @category.Name
+                        </td>
+                        <td>
+                            @category.LName
+                        </td>
+                        <td>
+                            @category.Address
                         </td>
                     </tr>
                 }
@@ -53,21 +61,20 @@
 
 </GenericList>
 
+
 @code {
-
-
-    public List<Country>? Countries{ get; set; }
+    public List<Category>? Categories { get; set; }
 
     //cuando la pagina carga, ejecuta este metodo
     protected async override Task OnInitializedAsync()
     {
-        var responseHppt = await repository.Get<List<Country>>("api/countries");
-        Countries = responseHppt.Response!;
+        var responseHppt = await repository.Get<List<Category>>("api/categories");
+        Categories = responseHppt.Response!;
     }
 
     private async Task LoadAsync()
     {
-        
+
     }
 
     private async Task DelegateAsync(int id)
@@ -75,11 +82,11 @@
         var result = await sweetAlertService.FireAsync(new SweetAlertOptions
             {
                 Title = "Confirmacion",
-                Text = "¿Deseas eliminar el registro de la página?",
+                Text = "¿Deseas eliminar el registro?",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 CancelButtonText = "No perro",
-                ConfirmButtonText = "Sip :)",
+                ConfirmButtonText = "Sip pa'ps :p",
             });
 
 
@@ -90,22 +97,19 @@
             //Deja salir al usuario sin guardar los cambios
         }
 
-        var responseHttp = await repository.Delete($"/api/countries/{id}");
+        var responseHttp = await repository.Delete($"/api/categories/{id}");
         if (responseHttp.Error)
         {
 
-            if(responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
+            if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
-                await sweetAlertService.FireAsync("HHERROR",message,SweetAlertIcon.Error);
+                await sweetAlertService.FireAsync("HHERROR", message, SweetAlertIcon.Error);
                 return;
 
             }
         }
 
     }
-
-
-    
 
 }

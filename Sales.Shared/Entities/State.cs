@@ -1,22 +1,31 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+
 
 namespace Sales.Shared.Entities
 {
-    public class Country
+    public class State
     {
         public int Id { get; set; }
-        [Display(Name = "Pais")]
+        [Display(Name = "Estado/Departamento")]
         [MaxLength(100, ErrorMessage = "El campo {0 debe tener máximo {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+     
         public string Name { get; set; } = null!;
 
-        public ICollection<State>? States { get; set; } = null!;
+        public Country? Country { get; set; }
 
-        public int StatesNumber => States == null ? 0 : States.Count;
+        public ICollection<City>? Cities { get; set; }
+
+        public int CitiesNumber => Cities == null? 0 : Cities.Count;
+
+
     }
+
 }
+
